@@ -1,0 +1,6 @@
+{
+  "itemGroup.ae_tc.main": "AE 匠魂部件",
+  "block.ae_tc.auto_part_builder": "自动部件制作台",
+  "gui.ae_tc.auto_part_builder.cost": "消耗: %s",
+  "gui.ae_tc.auto_part_builder.no_patterns": "没有可用的部件配方"
+}

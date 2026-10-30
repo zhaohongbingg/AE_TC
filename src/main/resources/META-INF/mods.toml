@@ -1,0 +1,34 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+description="${mod_description}"
+
+[[dependencies.${mod_id}]]
+modId="forge"
+versionRange="${forge_version_range}"
+mandatory=true
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+versionRange="${minecraft_version_range}"
+mandatory=true
+
+# 匠魂是硬前置：本模组的核心就是把匠魂的部件配方自动化，没有它方块无法工作。
+[[dependencies.${mod_id}]]
+modId="tconstruct"
+versionRange="[3.10.0,)"
+mandatory=true
+ordering="AFTER"
+
+# AE2 是软前置：装了才有"样板供应器整单推料"和模式访问终端的机器显示；
+# 没装时方块仍然可用（有界面，能手动做，也能被漏斗按面喂料）。
+[[dependencies.${mod_id}]]
+modId="ae2"
+versionRange="[15.0.0,)"
+mandatory=false
+ordering="AFTER"

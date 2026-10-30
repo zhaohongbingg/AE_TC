@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "ae_tc:block/auto_part_builder_top",
+    "side": "ae_tc:block/auto_part_builder_side",
+    "bottom": "ae_tc:block/auto_part_builder_bottom",
+    "particle": "ae_tc:block/auto_part_builder_side"
+  }
+}

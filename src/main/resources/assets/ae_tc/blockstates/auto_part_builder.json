@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "ae_tc:block/auto_part_builder"
+    },
+    "lit=true": {
+      "model": "ae_tc:block/auto_part_builder_on"
+    }
+  }
+}

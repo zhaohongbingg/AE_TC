@@ -1,0 +1,110 @@
+plugins {
+    // 钉选 6.0.54（MDK 写 [6.0,6.2)）；版本更新时同步 versions.js 矩阵。
+    id 'net.minecraftforge.gradle' version '6.0.54'
+    // AE2 的 mixin refmap 是按 parchment 生成的，用 official 映射会 remap 失败
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    // 关键：MixinGradle 负责在开发环境把各模组的 refmap 从 SRG 重映射到当前映射，
+    // 不装它 AE2 自己的 mixin 会报 'could not find any targets matching m_129815_'。
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+}
+
+version = "0.1.0"
+group = "com.aetc"
+archivesBaseName = "ae_tc"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
+    runs {
+        client {
+            workingDirectory project.file('run')
+        }
+        server {
+            workingDirectory project.file('run')
+        }
+        gameTestServer {
+            workingDirectory project.file('run')
+        }
+        data {
+            workingDirectory project.file('run')
+            args '--mod', mod_id, '--all'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    // 匠魂 + Mantle
+    maven {
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+    // 离线兜底仓库：某些网络环境连不上 cfa2.cursemaven.com，此时把 AE2 / GuideME 的 jar 放到
+    // 项目内 maven-repo/curse/maven/<artifact>-<项目ID>/<文件ID>/ 下
+    // （jar 名必须是 <artifact>-<文件ID>.jar，并带同名最小 pom，见 README「依赖」一节）。
+    maven {
+        name 'offlineMirror'
+        url "$projectDir/maven-repo"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    // CurseForge 官方 maven：网络能通时 AE2 / GuideME 直接从这里取，不需要本地离线仓库
+    maven {
+        name 'cursemaven'
+        url "https://cfa2.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // 匠魂与前置（硬依赖）
+    implementation fg.deobf("slimeknights.mantle:Mantle:1.20.1-1.11.79")
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:1.20.1-3.10.2.92")
+
+    // AE2 与 GuideME（软依赖，只在编译期与开发期）
+    implementation fg.deobf("curse.maven:ae2-223794:9357405")
+    implementation fg.deobf("curse.maven:guideme-1173950:8204776")
+}
+
+// mods.toml / pack.mcmeta 里的 ${mod_id} 等由 Gradle expand 替换（与 scaffold 的 {{}} 不冲突）。
+def replaceProperties = [
+    minecraft_version     : minecraft_version,
+    minecraft_version_range: minecraft_version_range,
+    forge_version         : forge_version,
+    forge_version_range   : forge_version_range,
+    loader_version_range  : loader_version_range,
+    mod_id                : mod_id,
+    mod_name              : mod_name,
+    mod_license           : mod_license,
+    mod_version           : mod_version,
+    mod_authors           : mod_authors,
+    mod_description       : mod_description,
+]
+
+processResources {
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) { expand replaceProperties }
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title"     : mod_id,
+            "Specification-Vendor"    : mod_authors,
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : project.version,
+            "Implementation-Vendor"   : mod_authors,
+        ])
+    }
+    finalizedBy 'reobfJar'
+}

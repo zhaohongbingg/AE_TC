@@ -1,0 +1,19 @@
+# 运行目录 / 构建产物
+build/
+run/
+out/
+.gradle/
+*.log
+
+# IDE
+.idea/
+*.iml
+.eclipse/
+.vscode/
+
+# 本地离线依赖仓库（第三方 jar，不入库；见 README「依赖」一节）
+maven-repo/
+
+# 系统垃圾
+.DS_Store
+Thumbs.db

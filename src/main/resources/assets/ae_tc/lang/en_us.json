@@ -1,0 +1,6 @@
+{
+  "itemGroup.ae_tc.main": "AE Tinkers",
+  "block.ae_tc.auto_part_builder": "Auto Part Builder",
+  "gui.ae_tc.auto_part_builder.cost": "Cost: %s",
+  "gui.ae_tc.auto_part_builder.no_patterns": "No part recipes loaded"
+}

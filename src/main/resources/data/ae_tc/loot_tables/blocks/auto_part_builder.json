@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ae_tc:auto_part_builder"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ae_tc:blocks/auto_part_builder"
+}
